@@ -4,7 +4,7 @@ const sepoliaRpcUrl = process.env.SEPOLIA_RPC_URL || "";
 const privateKey = process.env.PRIVATE_KEY || "";
 
 module.exports = {
-  solidity: "0.8.20",
+  solidity: "0.8.22",
   networks: {
     sepolia: {
       url: sepoliaRpcUrl,
