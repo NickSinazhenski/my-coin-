@@ -9,21 +9,13 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "node": "hardhat node",
-    "deploy:v1:local": "hardhat run scripts/deploy-v1-proxy.js --network localhost",
-    "deploy:v1:sepolia": "hardhat run scripts/deploy-v1-proxy.js --network sepolia",
-    "interact:v1:local": "hardhat run scripts/interact-v1-proxy.js --network localhost",
-    "interact:v1:sepolia": "hardhat run scripts/interact-v1-proxy.js --network sepolia",
-    "upgrade:v2:local": "hardhat run scripts/upgrade-to-v2.js --network localhost",
-    "upgrade:v2:sepolia": "hardhat run scripts/upgrade-to-v2.js --network sepolia"
+    "deploy:multisig:local": "hardhat run scripts/deploy-multisig.js --network localhost",
+    "deploy:multisig:sepolia": "hardhat run scripts/deploy-multisig.js --network sepolia"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.6.1",
-    "@openzeppelin/contracts-upgradeable": "^5.6.1"
-  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.3",
     "chai": "^6.2.2",

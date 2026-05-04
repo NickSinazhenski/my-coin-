@@ -1,24 +1,68 @@
-# Upgradeable ERC20 Homework
+# Multi-Signature Wallet Homework
 
-## Setup
+## Overview
+
+This project implements a simple Ethereum multi-signature wallet in Solidity.
+The wallet is controlled by a fixed set of owners, and a transaction can only be executed after it receives the minimum number of required confirmations.
+
+## Why multi-sig wallets matter
+
+Multi-signature wallets reduce single-key risk.
+They are widely used in DeFi treasuries, protocol governance, DAO operations, and shared custody because no single owner can unilaterally move funds or call privileged actions.
+
+## Design choices
+
+- Fixed owner set defined in the constructor
+- Configurable confirmation threshold
+- Generic transaction model: `to`, `value`, `data`
+- Full transaction lifecycle:
+  - submit
+  - confirm
+  - revoke
+  - execute
+- Ether deposits supported through `receive()`
+- Event logging for all key actions
+
+Dynamic owner management is intentionally omitted in this version to keep the contract smaller and easier to reason about.
+
+## Contract files
+
+- `contracts/MultiSigWallet.sol` - main multi-sig wallet contract
+- `test/MultiSigWallet.test.js` - unit tests for deployment, lifecycle, execution, and edge cases
+- `scripts/deploy-multisig.js` - deployment script for localhost or Sepolia
+
+## Security considerations
+
+- Only registered owners can submit, confirm, revoke, or execute transactions
+- Duplicate confirmations are rejected
+- Transactions cannot be executed twice
+- Revocation is blocked after execution
+- Execution requires the configured threshold
+- Ether transfer uses checks-effects-interactions:
+  - validation first
+  - state updated before external call
+  - external call executed last
+- Custom errors are used for clearer failure modes and lower gas than long revert strings
+
+## Development setup
 
 ```bash
 npm install
 ```
 
-## Compile
+Compile:
 
 ```bash
 npm run compile
 ```
 
-## Test the full upgrade flow
+Run tests:
 
 ```bash
 npm test
 ```
 
-## Local deployment and upgrade
+## Local deployment
 
 Terminal 1:
 
@@ -29,32 +73,14 @@ HARDHAT_DISABLE_TELEMETRY_PROMPT=true npx hardhat node
 Terminal 2:
 
 ```bash
-npm run deploy:v1:local
+npm run deploy:multisig:local
 ```
 
-Save the proxy address from the output, then export the values below:
+By default, the script uses the first 3 local signers and requires 2 confirmations.
 
-```bash
-export TOKEN_PROXY_ADDRESS=0xYourProxyAddress
-export RECIPIENT_ADDRESS=0xRecipientAddress
-export SECOND_RECIPIENT_ADDRESS=0xSecondRecipientAddress
-```
+## Sepolia deployment
 
-Run V1 interactions:
-
-```bash
-npm run interact:v1:local
-```
-
-Run the upgrade to V2:
-
-```bash
-npm run upgrade:v2:local
-```
-
-## Sepolia deployment and upgrade
-
-Create `.env` from `.env.example`, fill in your values, then load it:
+Create `.env` from `.env.example`, then load it:
 
 ```bash
 set -a
@@ -62,54 +88,44 @@ source .env
 set +a
 ```
 
-Deploy V1 and proxy:
+Example values:
 
 ```bash
-npm run deploy:v1:sepolia
+SEPOLIA_RPC_URL=https://your-sepolia-rpc-url
+PRIVATE_KEY=your-private-key-without-0x
+MULTISIG_OWNERS=0xOwner1,0xOwner2,0xOwner3
+MULTISIG_REQUIRED=2
 ```
 
-Current deployed values:
-
-- Deployer / Proxy owner: `0xE3889c3910b77a8bCdD1BC00CaAA6Cbb20bb7dd9`
-- V1 implementation: `0x5aE54DfC75c6aAf589008AFE52886eACDc32C81c`
-- Proxy: `0xA99660b724fc5646CB0191e5253e05114F9f254b`
-
-Explorer links:
-
-- Proxy: [https://sepolia.etherscan.io/address/0xA99660b724fc5646CB0191e5253e05114F9f254b](https://sepolia.etherscan.io/address/0xA99660b724fc5646CB0191e5253e05114F9f254b)
-- V1 implementation: [https://sepolia.etherscan.io/address/0x5aE54DfC75c6aAf589008AFE52886eACDc32C81c](https://sepolia.etherscan.io/address/0x5aE54DfC75c6aAf589008AFE52886eACDc32C81c)
-
-Export the proxy and recipient addresses:
+Deploy:
 
 ```bash
-export TOKEN_PROXY_ADDRESS=0xA99660b724fc5646CB0191e5253e05114F9f254b
-export RECIPIENT_ADDRESS=0x8a963C394BEc7974d32316784bc869f70fA25107
-export SECOND_RECIPIENT_ADDRESS=0xE3889c3910b77a8bCdD1BC00CaAA6Cbb20bb7dd9
+npm run deploy:multisig:sepolia
 ```
 
-Execute mint and transfer through the proxy:
+## How to interact with the wallet
 
-```bash
-npm run interact:v1:sepolia
-```
+1. Fund the wallet by sending ETH to the deployed contract address.
+2. Submit a transaction:
+   one owner proposes a transfer with a target address, ETH value, and optional calldata.
+3. Confirm the transaction:
+   other owners confirm the same `txIndex`.
+4. Execute the transaction:
+   any owner can execute it after the threshold is reached.
+5. Revoke if needed:
+   an owner can revoke their confirmation before execution.
 
-Current interaction logs:
+## Required deliverables
 
-- Mint tx hash: `0x287753678f067ec5e96ec1e6c8ff1b14b1ed84a4fb2ff701bf7989ae41f1d05c`
-- Transfer tx hash: `0xcbc07f20849c2d654355d48ae64cfaf504ae67497820e0c2378f49c45dd34483`
-- Owner balance: `1000000000000000000000000`
-- Recipient balance: `1000000000000000000000`
-- Second recipient balance: `1000000000000000000000000`
+- Solidity code for `MultiSigWallet.sol`
+- Deployment script or steps
+- Explorer links, screenshots, and logs showing:
+  - wallet deployment
+  - transaction submission and confirmations
+  - successful execution
+  - balances after execution
 
-Explorer links:
+## Reflection
 
-- Mint tx: [https://sepolia.etherscan.io/tx/0x287753678f067ec5e96ec1e6c8ff1b14b1ed84a4fb2ff701bf7989ae41f1d05c](https://sepolia.etherscan.io/tx/0x287753678f067ec5e96ec1e6c8ff1b14b1ed84a4fb2ff701bf7989ae41f1d05c)
-- Transfer tx: [https://sepolia.etherscan.io/tx/0xcbc07f20849c2d654355d48ae64cfaf504ae67497820e0c2378f49c45dd34483](https://sepolia.etherscan.io/tx/0xcbc07f20849c2d654355d48ae64cfaf504ae67497820e0c2378f49c45dd34483)
-
-Upgrade the proxy to V2:
-
-```bash
-npm run upgrade:v2:sepolia
-```
-
-
+The purpose of a multi-sig wallet is to distribute control and reduce trust in any single participant.
+This makes administrative actions and treasury transfers much safer in decentralized systems, especially where funds are managed collectively.
