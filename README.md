@@ -1,50 +1,24 @@
-# Multi-Signature Wallet Homework
+# Assignment 9: ERC-721 Soulbound Visit Card and ERC-1155 Game Characters
+
+## Contracts
+
+- `contracts/SoulboundVisitCardERC721.sol`
+- `contracts/GameCharacterCollectionERC1155.sol`
 
 ## Overview
 
-This project implements a simple Ethereum multi-signature wallet in Solidity.
-The wallet is controlled by a fixed set of owners, and a transaction can only be executed after it receives the minimum number of required confirmations.
+This project contains two separate NFT contracts:
 
-## Why multi-sig wallets matter
+- `SoulboundVisitCardERC721`:
+  a non-transferable ERC-721 token used as a unique student visit card.
+- `GameCharacterCollectionERC1155`:
+  an ERC-1155 collection with 10 distinct game character token IDs that supports batch minting and batch transfers.
 
-Multi-signature wallets reduce single-key risk.
-They are widely used in DeFi treasuries, protocol governance, DAO operations, and shared custody because no single owner can unilaterally move funds or call privileged actions.
+## Solidity version
 
-## Design choices
+- `0.8.24`
 
-- Fixed owner set defined in the constructor
-- Configurable confirmation threshold
-- Generic transaction model: `to`, `value`, `data`
-- Full transaction lifecycle:
-  - submit
-  - confirm
-  - revoke
-  - execute
-- Ether deposits supported through `receive()`
-- Event logging for all key actions
-
-Dynamic owner management is intentionally omitted in this version to keep the contract smaller and easier to reason about.
-
-## Contract files
-
-- `contracts/MultiSigWallet.sol` - main multi-sig wallet contract
-- `test/MultiSigWallet.test.js` - unit tests for deployment, lifecycle, execution, and edge cases
-- `scripts/deploy-multisig.js` - deployment script for localhost or Sepolia
-
-## Security considerations
-
-- Only registered owners can submit, confirm, revoke, or execute transactions
-- Duplicate confirmations are rejected
-- Transactions cannot be executed twice
-- Revocation is blocked after execution
-- Execution requires the configured threshold
-- Ether transfer uses checks-effects-interactions:
-  - validation first
-  - state updated before external call
-  - external call executed last
-- Custom errors are used for clearer failure modes and lower gas than long revert strings
-
-## Development setup
+## Setup
 
 ```bash
 npm install
@@ -62,7 +36,130 @@ Run tests:
 npm test
 ```
 
-## Local deployment
+## Deployment scripts
+
+Visit card deployment:
+
+```bash
+npm run deploy:visitcard:local
+npm run deploy:visitcard:sepolia
+```
+
+Game character deployment:
+
+```bash
+npm run deploy:gamechars:local
+npm run deploy:gamechars:sepolia
+```
+
+## Interaction scripts
+
+Mint one soulbound visit card to the student wallet:
+
+```bash
+npm run mint:visitcard:local
+npm run mint:visitcard:sepolia
+```
+
+Mint 10 ERC-1155 character NFTs and batch transfer 2 of them to the student wallet:
+
+```bash
+npm run mint:gamechars:local
+npm run mint:gamechars:sepolia
+```
+
+## Metadata structure and storage
+
+### ERC-721 soulbound visit card metadata
+
+Each visit card token should point to a unique JSON file stored off-chain, typically on IPFS.
+The metadata must include:
+
+- `name`
+- `description`
+- `image`
+- at least two student-related attributes such as:
+  - `studentName`
+  - `studentID`
+  - `course`
+  - `year`
+
+Example:
+
+```json
+{
+  "name": "Student Visit Card #1",
+  "description": "Soulbound student visit card NFT.",
+  "image": "ipfs://<image-cid>/visit-card-1.png",
+  "attributes": [
+    { "trait_type": "studentName", "value": "Alice Doe" },
+    { "trait_type": "studentID", "value": "S12345" },
+    { "trait_type": "course", "value": "Blockchain" },
+    { "trait_type": "year", "value": "2026" }
+  ]
+}
+```
+
+### ERC-1155 game character metadata
+
+The ERC-1155 contract is designed for a base metadata URI such as:
+
+```text
+ipfs://<metadata-cid>/{id}.json
+```
+
+Each of the 10 token IDs should have its own metadata JSON file with:
+
+- `name`
+- `description`
+- `image`
+- at least two character attributes such as:
+  - `color`
+  - `speed`
+  - `strength`
+  - `rarity`
+
+Example:
+
+```json
+{
+  "name": "Flame Knight",
+  "description": "Game character NFT #1",
+  "image": "ipfs://<image-cid>/1.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Red" },
+    { "trait_type": "speed", "value": 7 },
+    { "trait_type": "strength", "value": 9 },
+    { "trait_type": "rarity", "value": "Epic" }
+  ]
+}
+```
+
+## Soulbound behavior
+
+The ERC-721 contract enforces soulbound behavior by:
+
+- disabling `approve`
+- disabling `setApprovalForAll`
+- disabling `transferFrom`
+- disabling both `safeTransferFrom` overloads
+- blocking internal token transfers after minting through `_update`
+
+Only minting is allowed.
+
+## Access control
+
+Both contracts use `Ownable`.
+Only the contract owner/admin can mint NFTs.
+
+## Proof of functionality to collect
+
+- ERC-721 visit card mint transaction hash or screenshot
+- ERC-1155 batch mint transaction hash or screenshot
+- ERC-1155 batch transfer transaction hash or screenshot
+- Explorer links for deployed contracts
+
+## Suggested local workflow
 
 Terminal 1:
 
@@ -73,59 +170,13 @@ HARDHAT_DISABLE_TELEMETRY_PROMPT=true npx hardhat node
 Terminal 2:
 
 ```bash
-npm run deploy:multisig:local
+npm run deploy:visitcard:local
+npm run deploy:gamechars:local
 ```
 
-By default, the script uses the first 3 local signers and requires 2 confirmations.
-
-## Sepolia deployment
-
-Create `.env` from `.env.example`, then load it:
+Then set the required environment variables and run:
 
 ```bash
-set -a
-source .env
-set +a
+npm run mint:visitcard:local
+npm run mint:gamechars:local
 ```
-
-Example values:
-
-```bash
-SEPOLIA_RPC_URL=https://your-sepolia-rpc-url
-PRIVATE_KEY=your-private-key-without-0x
-MULTISIG_OWNERS=0xOwner1,0xOwner2,0xOwner3
-MULTISIG_REQUIRED=2
-```
-
-Deploy:
-
-```bash
-npm run deploy:multisig:sepolia
-```
-
-## How to interact with the wallet
-
-1. Fund the wallet by sending ETH to the deployed contract address.
-2. Submit a transaction:
-   one owner proposes a transfer with a target address, ETH value, and optional calldata.
-3. Confirm the transaction:
-   other owners confirm the same `txIndex`.
-4. Execute the transaction:
-   any owner can execute it after the threshold is reached.
-5. Revoke if needed:
-   an owner can revoke their confirmation before execution.
-
-## Required deliverables
-
-- Solidity code for `MultiSigWallet.sol`
-- Deployment script or steps
-- Explorer links, screenshots, and logs showing:
-  - wallet deployment
-  - transaction submission and confirmations
-  - successful execution
-  - balances after execution
-
-## Reflection
-
-The purpose of a multi-sig wallet is to distribute control and reduce trust in any single participant.
-This makes administrative actions and treasury transfers much safer in decentralized systems, especially where funds are managed collectively.

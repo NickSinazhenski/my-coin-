@@ -1,0 +1,11 @@
+{
+  "name": "Golden Paladin",
+  "description": "Game character NFT #5",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/06.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Gold" },
+    { "trait_type": "speed", "value": 5 },
+    { "trait_type": "strength", "value": 10 },
+    { "trait_type": "rarity", "value": "Legendary" }
+  ]
+}

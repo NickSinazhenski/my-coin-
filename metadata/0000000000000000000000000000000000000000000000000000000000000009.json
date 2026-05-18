@@ -1,0 +1,11 @@
+{
+  "name": "Crystal Healer",
+  "description": "Game character NFT #9",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/10.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Pink" },
+    { "trait_type": "speed", "value": 6 },
+    { "trait_type": "strength", "value": 4 },
+    { "trait_type": "rarity", "value": "Uncommon" }
+  ]
+}

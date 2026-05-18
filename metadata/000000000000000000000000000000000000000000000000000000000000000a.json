@@ -1,0 +1,11 @@
+{
+  "name": "Void Dragon",
+  "description": "Game character NFT #10",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/01.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Dark Violet" },
+    { "trait_type": "speed", "value": 8 },
+    { "trait_type": "strength", "value": 10 },
+    { "trait_type": "rarity", "value": "Legendary" }
+  ]
+}

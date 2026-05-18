@@ -1,0 +1,11 @@
+{
+  "name": "Forest Archer",
+  "description": "Game character NFT #3",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/04.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Green" },
+    { "trait_type": "speed", "value": 9 },
+    { "trait_type": "strength", "value": 6 },
+    { "trait_type": "rarity", "value": "Uncommon" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Iron Guardian",
+  "description": "Game character NFT #8",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/09.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Gray" },
+    { "trait_type": "speed", "value": 3 },
+    { "trait_type": "strength", "value": 9 },
+    { "trait_type": "rarity", "value": "Common" }
+  ]
+}

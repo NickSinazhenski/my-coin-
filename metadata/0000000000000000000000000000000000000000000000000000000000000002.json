@@ -1,0 +1,11 @@
+{
+  "name": "Aqua Mage",
+  "description": "Game character NFT #2",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/03.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Blue" },
+    { "trait_type": "speed", "value": 6 },
+    { "trait_type": "strength", "value": 8 },
+    { "trait_type": "rarity", "value": "Rare" }
+  ]
+}

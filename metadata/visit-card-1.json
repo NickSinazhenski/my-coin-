@@ -1,0 +1,11 @@
+{
+  "name": "Student Visit Card #1",
+  "description": "Soulbound student visit card NFT.",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/11.png",
+  "attributes": [
+    { "trait_type": "studentName", "value": "Your Name" },
+    { "trait_type": "studentID", "value": "ST123456" },
+    { "trait_type": "course", "value": "Blockchain Development" },
+    { "trait_type": "year", "value": "2026" }
+  ]
+}

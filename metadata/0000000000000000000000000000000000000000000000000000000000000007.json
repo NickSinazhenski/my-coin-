@@ -1,0 +1,11 @@
+{
+  "name": "Storm Rider",
+  "description": "Game character NFT #7",
+  "image": "ipfs://bafybeiepgvd2bif7pfhtxmcqworwa2c7er6okhycrnoeqqv65pgrk7r45u/08.png",
+  "attributes": [
+    { "trait_type": "color", "value": "Purple" },
+    { "trait_type": "speed", "value": 8 },
+    { "trait_type": "strength", "value": 7 },
+    { "trait_type": "rarity", "value": "Epic" }
+  ]
+}

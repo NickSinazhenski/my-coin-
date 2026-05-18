@@ -9,8 +9,14 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "node": "hardhat node",
-    "deploy:multisig:local": "hardhat run scripts/deploy-multisig.js --network localhost",
-    "deploy:multisig:sepolia": "hardhat run scripts/deploy-multisig.js --network sepolia"
+    "deploy:visitcard:local": "hardhat run scripts/deploy-visit-card.js --network localhost",
+    "deploy:visitcard:sepolia": "hardhat run scripts/deploy-visit-card.js --network sepolia",
+    "deploy:gamechars:local": "hardhat run scripts/deploy-game-characters.js --network localhost",
+    "deploy:gamechars:sepolia": "hardhat run scripts/deploy-game-characters.js --network sepolia",
+    "mint:visitcard:local": "hardhat run scripts/mint-visit-card.js --network localhost",
+    "mint:visitcard:sepolia": "hardhat run scripts/mint-visit-card.js --network sepolia",
+    "mint:gamechars:local": "hardhat run scripts/mint-game-characters.js --network localhost",
+    "mint:gamechars:sepolia": "hardhat run scripts/mint-game-characters.js --network sepolia"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +27,8 @@
     "chai": "^6.2.2",
     "ethers": "^5.8.0",
     "hardhat": "^2.22.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.6"
   }
 }
